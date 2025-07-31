@@ -132,5 +132,4 @@ if __name__ == '__main__':
             scatter_fig.to_html(full_html=False)
         ), encoding='utf8')
     print(f'Wrote {args.report_name}')
-    Path('test.html').write_text(scatter_fig.to_html(), encoding='utf8')
 
