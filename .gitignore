@@ -1,0 +1,8 @@
+# Python data
+.ipynb_checkpoints
+__pycache__
+
+demo/*
+
+# pixi environments
+.pixi

@@ -1,0 +1,106 @@
+[project]
+name = "test"
+requires-python = ">= 3.11"
+version = "0.1.0"
+dependencies = ["kaleido>=1.0.0,<2"]
+
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64", "win-64"]
+
+[tool.pixi.dependencies]
+python = ">=3.12,<3.13"
+jupyter = ">=1.1.1,<2"
+pydot = ">=4.0.1,<5"
+plotly = ">=6.2.0,<7"
+ipywidgets = ">=8.1.7,<9"
+anywidget = ">=0.9.18,<0.10"
+
+[tool.pixi.target.linux-64.dependencies]
+keras = ">=3.10.0,<4"
+tensorflow = ">=2.18.0,<3"
+pytorch = ">=2.6.0,<3"
+jax = ">=0.5.2,<0.6"
+pandas = ">=2.3.1,<3"
+seaborn = ">=0.13.2,<0.14"
+matplotlib = ">=3.10.3,<4"
+mlflow = ">=3.1.4,<4"
+
+[tool.pixi.target.win-64.pypi-dependencies]
+keras = ">=3.10.0,<4"
+tensorflow = ">=2.18.0,<3"
+torch = ">=2.6.0,<3"
+jax = ">=0.5.2,<0.6"
+pandas = ">=2.3.1,<3"
+seaborn = ">=0.13.2, <0.14"
+matplotlib = ">=3.10.3, <4"
+mlflow = ">=3.1.4, <4"
+
+[tool.pixi.feature.hpc]
+platforms = ["linux-64"]
+
+[tool.pixi.feature.hpc.dependencies]
+keras = ">=3.10.0,<4" # just an example. HPC specific conda dependencies would go here
+
+[tool.pixi.environments]
+hpc = ["hpc"]
+
+[tool.pixi.tasks]
+replicate-publication = "pixi run eval"
+
+[tool.pixi.tasks.download-data]
+cmd = "python ./src/dataset.py {{ output_dir }}"
+args = [
+    {arg="output_dir", default="demo"}
+]
+outputs = ["{{ output_dir }}/training.csv", "{{ output_dir }}/testing.csv"]
+
+[tool.pixi.tasks.train]
+cmd = 'python ./src/train_ann.py {{ save_file }} {{ epochs }} {{ num_neurons }} {{ rng_seed }}'
+args = [
+    {arg="save_file", default="demo/neural_network.keras"},
+    {arg="epochs", default="100"},
+    {arg="num_neurons", default="64"},
+    {arg="rng_seed", default="329"}, # CBI
+]
+env = {KERAS_BACKEND='jax'}
+depends-on = ["download-data"]
+outputs = ["{{ save_file }}"]
+inputs = ["src/train_ann.py", "src/model.py"]
+
+[tool.pixi.tasks.eval]
+cmd = 'python ./src/mk_graph.py {{ model_file }} {{ output_dir }} {{ output_dir }}/{{ time_series_file }} {{ output_dir }}/{{ scatter_file }} {{ output_dir }}/{{ report_file }}'
+args = [
+    {arg="model_file", default="demo/neural_network.keras"},
+    {arg="output_dir", default="demo/results"},
+    {arg="time_series_file", default="time_series.html"},
+    {arg="scatter_file", default="scatter.html"},
+    {arg="report_file", default="report.html"},
+]
+env = {KERAS_BACKEND='tensorflow'}
+depends-on = ["train"]
+inputs = [
+    "{{ model_file }}",
+    "src/mk_graph.py",
+]
+outputs = [
+    "{{ output_dir }}/{{ time_series_file }}",
+    "{{ output_dir }}/{{ scatter_file }}",
+    "{{ output_dir }}/{{ report_file }}",
+]
+
+[tool.basedpyright]
+reportMissingTypeStubs = false
+reportUnknownMemberType = false
+reportUnannotatedClassAttribute = false
+reportUnknownVariableType = false
+reportAssignmentType = false
+reportUnknownParameterType = false
+reportMissingParameterType = false
+reportUnknownArgumentType = false
+reportOperatorIssue = false
+pythonVersion = "3.12"
