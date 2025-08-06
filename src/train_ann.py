@@ -58,7 +58,7 @@ if __name__ == '__main__':
             ),
             keras.callbacks.EarlyStopping(
                 monitor='val_loss',
-                patience=10,
+                patience=5,
                 start_from_epoch=20,
                 restore_best_weights=True,
                 verbose=1,

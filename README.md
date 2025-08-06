@@ -10,7 +10,7 @@ This includes installing the correct version of Python and specific dependencies
 
 The `replicate-publication` task will recursively run the tasks it depends on, which includes `download-data`, `train`, and `eval`.
 
-The end result of all this is the required data being downloaded, a ridiculously complex model being trained with `jax`, and the model being run with `tensorflow` to generate reports (which could include evaluation metrics).
+The end result of all this is the correct python environment being installed, the required data being downloaded, a ridiculously complex water level prediction model being trained with `jax`, and the model being run with `tensorflow` to generate reports (which could include evaluation metrics). Also worth noting that PyTorch was used during development to debug a problem with the model (it seems to be the slowest training backend, but its flexibility allows for easy debugging). This effectively solves my reoccuring pain-point of recreating environments on multiple machines and keeping things up-to-date, as well as Hector and Miranda's difficulties with distributing a codebase associated with a publication (the explicit RNG seed helps reproducibility here as well).
 
 The model and training is quite over-engineered in the context of our lab, and has poor performance, but it is a demonstration that Keras 3 is definitely sufficient for anything we need.
 The training process includes learning rate reduction, early stopping, L1 and L2 regularization, and a weighted blend of 4 custom loss functions (including the KL loss a VAE would need and the log-probability loss a PNN needs).
@@ -20,7 +20,5 @@ There are [additional layers](https://keras.io/api/layers/) available in the Ker
 
 This means that, in addition to MLPs, VAEs, and PNNs, it should also be possible to implement FogNet, FogNet 2.0, and Marina's seq2seq model.
 
-This API is more than sufficient for anything we are likely to make.
-
-Added yesterday, is an adapted version of the preprocessing notebook that allows MLFlow results to be explored with our existing hyperparameter exploration visuals (pulled from https://github.com/conrad-blucher-institute/vae-fog-hrrr/blob/new-vae/report_utils.py).
+There is also an adapted version of the preprocessing notebook that allows MLFlow results to be explored with our existing hyperparameter exploration visuals (pulled from [here](https://github.com/conrad-blucher-institute/vae-fog-hrrr/blob/new-vae/report_utils.py)).
 This notebook can be accessed by running `pixi shell`, and then `jupyter-lab`.
