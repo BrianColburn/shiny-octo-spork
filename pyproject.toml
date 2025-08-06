@@ -2,7 +2,7 @@
 name = "test"
 requires-python = ">= 3.11"
 version = "0.1.0"
-dependencies = ["kaleido>=1.0.0,<2"]
+dependencies = ["kaleido>=1.0.0,<2", "dill>=0.4.0,<0.5"]
 
 [build-system]
 build-backend = "hatchling.build"
