@@ -3,7 +3,7 @@ Instructions from https://pixi.sh/latest/installation/:
 - Windows: `powershell -ExecutionPolicy ByPass -c "irm -useb https://pixi.sh/install.ps1 | iex"`
 - Linux: `curl -fsSL https://pixi.sh/install.sh | sh`
 
-Once Pixi is installed, open this directory in a terminal, run `pixi run replicate-publication`, watch das blinkenlights, then take a look inside the `demo` directory.
+Once Pixi is installed, restart the shell, open this directory in a terminal, run `pixi run replicate-publication`, watch das blinkenlights, then take a look inside the `demo` directory.
 
 By running Pixi at all, the dependencies will be updated and installed as needed.
 This includes installing the correct version of Python and specific dependencies from specific sources depending on the operating system and the environment selected (ie: the `hpc` environment).
